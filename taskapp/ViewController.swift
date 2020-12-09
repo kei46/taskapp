@@ -30,9 +30,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         print(searchBar.text)
         
-        let predicate = NSPredicate(format: "category = %@", searchBar.text!)
-        taskArray = realm.objects(Task.self).filter(predicate)
+        if searchBar.text! == "" {
+            taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
+        } else {
+            
+            let predicate = NSPredicate(format: "category = %@", searchBar.text!)
+            taskArray = realm.objects(Task.self).filter(predicate)
+        }
         tableView.reloadData()
+        
+        
     }
     
     func tableView(_ tableView:UITableView, numberOfRowsInSection section: Int) -> Int {
